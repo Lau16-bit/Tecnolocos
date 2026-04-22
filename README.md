@@ -1,1 +1,1 @@
-# Tecn-locos
+# Tecnolocos
