@@ -1,4 +1,4 @@
-# Spec 02 — Registro y Autenticación de Usuarios
+# Spec: Registro y Autenticación de Usuarios
 
 **Responsable:** Aquino Lucas Orlando  
 **Módulo:** `auth`  
