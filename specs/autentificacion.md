@@ -56,6 +56,12 @@ El sistema usa **JWT con doble token**: un `access_token` de corta duración (1 
 | CA-03 | Si las credenciales son válidas → HTTP 200, retorna `access_token` (1h), `refresh_token` (7d) y datos básicos del usuario |
 | CA-04 | El `access_token` es un JWT firmado con `SECRET_KEY` usando el algoritmo `HS256` |
 | CA-05 | El `refresh_token` es un JWT firmado con `SECRET_KEY` con expiración de 7 días |
+| CA-06 | El sistema debe limitar los intentos fallidos de autenticación a un máximo de 5 intentos consecutivos |
+| CA-07 | Luego de 5 intentos fallidos consecutivos, la cuenta se bloquea temporalmente durante 15 minutos |
+| CA-08 | Todas las comunicaciones de autenticación deben realizarse mediante HTTPS |
+| CA-09 | Los mensajes de error no deben indicar si el email existe o no en el sistema |
+| CA-10 | Todos los intentos de autenticación exitosos y fallidos deben registrarse en logs de auditoría |
+| CA-11 | Los datos de entrada deben validarse antes de procesarse para prevenir ataques de inyección |
 
 ---
 
@@ -272,3 +278,25 @@ class RefreshRequest(BaseModel):
 - En la DB, `password_hash` empieza con `$2b$` (bcrypt)
 - Dos usuarios con el mismo email no pueden crearse
 - Los tokens no se almacenan en ninguna tabla de la DB
+---
+
+## 8. Enriquecimiento de Seguridad (OWASP)
+
+### Historia de Usuario enriquecida
+
+HU-02: Inicio de sesión
+
+### Riesgo mitigado
+
+Acceso no autorizado a cuentas de usuario mediante ataques de fuerza bruta, robo de credenciales o explotación de fallas de autenticación.
+
+### Controles OWASP incorporados
+
+- Identification and Authentication Failures
+- Security Logging and Monitoring Failures
+- Cryptographic Failures
+- Injection Prevention
+
+### Justificación
+
+Se incorporan controles para limitar intentos de acceso, proteger la comunicación mediante HTTPS, evitar la divulgación de información sensible en mensajes de error y registrar eventos de autenticación para auditoría y detección de incidentes de seguridad.
