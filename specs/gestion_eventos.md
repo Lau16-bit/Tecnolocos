@@ -19,7 +19,7 @@ El listado público de eventos es el punto de entrada para los participantes; no
 
 ## 2. Historias de Usuario y Criterios de Aceptación
 
-### HU-01: Crear un evento
+### HU-01: Crear un evento    
 
 **Como** organizador registrado en la plataforma  
 **quiero** crear un nuevo evento académico con sus datos básicos y opcionales  
@@ -33,6 +33,12 @@ El listado público de eventos es el punto de entrada para los participantes; no
 - CA-04: Si el cupo mínimo se define, debe ser menor o igual al cupo máximo. De lo contrario se rechaza con HTTP 422.
 - CA-05: Si la fecha límite de inscripción se define, debe ser anterior a la fecha de inicio del evento. De lo contrario se rechaza con HTTP 422.
 - CA-06: Un usuario con rol `participante` que intente crear un evento recibe HTTP 403.
+- **CA-07**: Si el organizador ingresa datos inválidos o potencialmente maliciosos, el sistema rechaza la solicitud con HTTP 422.
+- **CA-08**: El sistema debe registrar en logs la creación de cada evento, incluyendo usuario, fecha y hora.
+- **CA-09**: El campo descripción no debe permitir la ejecución de código HTML o JavaScript.
+- **CA-10**: Si el usuario no posee un JWT válido, el sistema rechaza la operación con HTTP 401.
+- **CA-11**: El sistema debe verificar que el usuario posea permisos suficientes antes de procesar la solicitud.
+- **CA-12**: Los errores internos del servidor no deben exponer información sensible sobre la infraestructura o la base de datos.
 
 ---
 
@@ -212,3 +218,27 @@ Las tareas están ordenadas para que cada una pueda ser ejecutada y validada de 
 3. Intentar publicarlo de nuevo → verificar HTTP 400
 4. Cancelarlo → verificar que no aparece en listado público
 5. Acceder a `GET /events` sin token → verificar que responde correctamente
+
+---
+
+## 8. Enriquecimiento de Seguridad (OWASP)
+
+### Historia de Usuario enriquecida
+
+HU-01: Crear un evento
+
+### Riesgo mitigado
+
+Manipulación de datos del sistema mediante entradas maliciosas, acceso no autorizado a funcionalidades administrativas y exposición de información sensible.
+
+### Controles OWASP incorporados
+
+- Broken Access Control
+- Injection
+- Security Logging and Monitoring Failures
+- Identification and Authentication Failures
+- Security Misconfiguration
+
+### Justificación
+
+Se incorporan controles para validar los datos de entrada, prevenir ataques de inyección, asegurar que únicamente usuarios autorizados puedan crear eventos y registrar las acciones realizadas para facilitar la auditoría y detección de incidentes de seguridad.
