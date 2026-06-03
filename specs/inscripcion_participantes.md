@@ -43,13 +43,20 @@ Este módulo depende de que el módulo de Gestión de Eventos (`gestion_eventos.
 **quiero** inscribir manualmente a una persona en el evento  
 **para** registrar participantes que se anotaron por fuera de la plataforma
 
-**Criterios de aceptación:**
+**Criterios de aceptación (originales + controles OWASP):**
 
-- CA-26: El organizador puede inscribir a una persona indicando nombre completo, email y tipo de participación. Si el email corresponde a un usuario registrado, la inscripción se vincula a esa cuenta.
-- CA-27: Si el email no corresponde a ningún usuario registrado, la inscripción se crea igualmente como "invitado" (sin `usuario_id`).
-- CA-28: Solo el organizador del evento o un admin puede usar este endpoint. Cualquier otro rol recibe HTTP 403.
-- CA-29: Se respetan las mismas validaciones de cupo y fecha límite que en la inscripción autónoma (CA-22 y CA-23).
-- CA-30: El organizador puede indicar el rol de la persona inscripta: `participante` o `disertante`.
+| ID | Criterio | Fuente |
+|----|----------|--------|
+| CA-26 | El organizador puede inscribir a una persona indicando nombre completo, email y tipo de participación. Si el email corresponde a un usuario registrado, la inscripción se vincula a esa cuenta. | Original |
+| CA-27 | Si el email no corresponde a ningún usuario registrado, la inscripción se crea como "invitado" (sin `usuario_id`). | Original |
+| CA-28 | Solo el organizador del evento o un admin puede usar este endpoint. | Original |
+| CA-29 | Se respetan validaciones de cupo y fecha límite. | Original |
+| CA-30 | El organizador puede indicar el rol de la persona inscripta: `participante` o `disertante`. | Original |
+| **CA-S01** | El endpoint verifica que el `organizador_id` del token JWT coincida con `event.organizador_id`. Si no, HTTP 403. | **OWASP A1** |
+| **CA-S02** | Los campos `nombre_completo` y `email` son sanitizados y validados con regex en backend. | **OWASP A3** |
+| **CA-S03** | Si el email ya existe como usuario registrado, el sistema no revela información adicional del mismo. | **OWASP A7** |
+| **CA-S04** | Toda inscripción manual se registra en `audit_log` con organizador, email destino, evento, timestamp e IP. | **OWASP A9** |
+| **CA-S05** | El endpoint aplica rate limiting de 5 requests por minuto por IP. | **OWASP A5** |
 
 ---
 
