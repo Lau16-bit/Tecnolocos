@@ -10,12 +10,12 @@ jobs:
     name: Build and analyze
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
@@ -30,10 +30,12 @@ jobs:
           pytest --cov=. --cov-report=xml --cov-report=html
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: SonarSource/sonarqube-scan-action@v5.0.0
+        with:
+          projectBaseDir: .
+          args: >
+            -Dsonar.projectKey=MatiasRivas1_Tecnolocos
+            -Dsonar.organization=lau16-bit
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.projectKey=Lau16-bit_Tecnolocos
-            -Dsonar.organization=lau16-bit
+          SONAR_HOST_URL: https://sonarcloud.io
