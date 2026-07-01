@@ -33,3 +33,7 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=Lau16-bit_Tecnolocos
+            -Dsonar.organization=lau16-bit
